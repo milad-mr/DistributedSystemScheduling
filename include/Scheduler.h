@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cmath>
 using namespace std;
 
 #ifndef SCHEDULER_H
@@ -33,13 +34,18 @@ class Scheduler
 	float h_pc(FunctionInfo j, NodeInfo node);
 	float before_assignment_cost(FunctionInfo j, NodeInfo node);
 	float after_assignment_cost(FunctionInfo j, NodeInfo node);
+	
 public:
     Scheduler(int functionCount, int memoryNeeded, int cpuNeeded);
     Scheduler(int functionCount, int memoryNeeded, int cpuNeeded, int priority);
     void reSchedule();
-    ScheduleResult getNext();
+    
+    ScheduleResult getNext(); // old algorithm
+    NodeInfo getBestNode(FunctionInfo j); // new algorithm
+    ScheduleResult schedule(); // new algorithm
+   // ScheduleResult schedule();
     bool hasNext();
-    void updateProcessState();
+    void updateNodeState(NodeInfo newState);
     void addNode(string IpAddress);
     void addNode(NodeInfo newNode);
 		//~ static void SendExecutable(std::string ip, std::string port, std::string path);

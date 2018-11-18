@@ -15,7 +15,7 @@ struct FunctionInfo
 {
 	public:
 		int MemoryNeeded; // not used for some schedulers
-		int CpuNeeded; //weight of CPU required
+		int CpuNeeded = 1; //weight of CPU required
 };
 
 struct ScheduleResult

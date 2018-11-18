@@ -40,8 +40,9 @@ NodeInfo InformationHandler::getNodeState(NodeInfo oldInfo){
 	result.IpAddress = oldInfo.IpAddress;
 	result.MemoryTotal = atoi(v.at(7).c_str());
 	result.MemoryRemained = atoi(v.at(6).c_str());
-	int load = atoi(v[1].c_str());
-	
+	//cout << "hete 1" << endl;
+	result.Load = atoi(v[1].c_str());
+	//cout << "hete 2" << endl;
 	return result;
 	
 }

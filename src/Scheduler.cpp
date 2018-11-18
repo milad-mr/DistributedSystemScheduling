@@ -8,6 +8,7 @@ float Scheduler::virtualization_overhead(){
 
 float Scheduler::fi_vm_j(FunctionInfo j){
 	
+	return 1;
 	
 	
 }
@@ -51,23 +52,55 @@ float Scheduler::g_pc(FunctionInfo j, NodeInfo node){
 
 float Scheduler::h_pc(FunctionInfo j, NodeInfo node){
 	
-	
+	return node.Load;
 	
 }
 
 float Scheduler::before_assignment_cost(FunctionInfo j, NodeInfo node){
 	
-	
+	return pow(a(), g_pc(j, node)) + pow(a(), h_pc(j, node)); 
 	
 }
 
 float Scheduler::after_assignment_cost(FunctionInfo j, NodeInfo node){
 	
+	return pow(a(), g_pc(j, node) + fi_pcy_pc(j)) + pow(a(), h_pc(j, node) +p_pcy_pc(j, node)); 
 	
 	
 }
 
 
+NodeInfo Scheduler::getBestNode(FunctionInfo j){
+	float minCost = 99999;
+	NodeInfo bestNode;
+	// The chosen node will not delete from list
+	for(auto const& node: nodes) {
+		cout << " in nodeees for " << endl;
+		float cost = after_assignment_cost(j, node) - before_assignment_cost(j, node);
+		if (cost < minCost){
+			    cout << " node ip is :" << node.IpAddress << "Load is : " << node.Load << endl;
+
+			minCost = cost;
+			bestNode = node;
+		}
+	}
+	//ScheduleResult result(bestNode, nextFunctionIndex, nextFunctionIndex + count);
+                 
+    cout << "best node ip is :" << bestNode.IpAddress << "Load is : " << bestNode.Load << endl;
+	return bestNode;
+	
+	//return best node
+}
+
+ScheduleResult Scheduler::schedule(){
+	FunctionInfo fInfo;
+	fInfo.CpuNeeded = 1;
+	
+	ScheduleResult result(getBestNode(fInfo), nextFunctionIndex, nextFunctionIndex + 1);
+    nextFunctionIndex ++;
+    return result;
+	
+}
 
 Scheduler::Scheduler(int functionCount, int memoryNeeded, int cpuNeeded){
     nextProcessId = 1;
@@ -93,6 +126,18 @@ bool Scheduler::hasNext(){
 
 }
 
+ void Scheduler::updateNodeState(NodeInfo newState){
+	 cout << "in update node state ips is " <<newState.IpAddress << endl; 
+	 for(auto & node: nodes) {
+		 if (node.IpAddress == newState.IpAddress){
+			cout << "old State Load is :" << node.Load << endl;
+			node = newState;
+			cout << "new State Load is :" << node.Load << endl;
+		 }
+	 }
+	//zzz cout << "new State Load is :" << node.Load << endl;
+ }
+ 
 ScheduleResult Scheduler::getNext(){
     ScheduleResult result;
     int estimatedFunctionMemoryNeeded = memoryNeeded / functionCount;
