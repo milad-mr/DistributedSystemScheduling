@@ -1,5 +1,73 @@
 #include "Scheduler.h"
 
+float Scheduler::virtualization_overhead(){
+	return 0;
+	
+	
+}
+
+float Scheduler::fi_vm_j(FunctionInfo j){
+	
+	
+	
+}
+
+float Scheduler::fi_pcy_pc(FunctionInfo j){
+	// The effective idling time of job j resulting in the resource idling
+	// of physical core pcy, when j is assigned to the virtual core vc
+	// that is mapped to physical core pc
+	
+	return fi_vm_j(j);
+	
+	
+}
+
+float Scheduler::p_pcy_pc(FunctionInfo j, NodeInfo node){
+	// The effective load imposed on pc due to the 
+	// assignment of job j to virtual core vc that
+	// is mapped to the physical core pc
+	return (j.CpuNeeded / node.CpuRemained) 
+	+ virtualization_overhead() + sigma_pcy_pc(j) - fi_pcy_pc(j);
+	
+}
+
+float Scheduler::sigma_pcy_pc(FunctionInfo j){
+	
+	
+	
+}
+
+float Scheduler::a(){
+	// a  = 1+γ/2
+	return 1.5;
+	
+}
+
+float Scheduler::g_pc(FunctionInfo j, NodeInfo node){
+	
+	
+	
+}
+
+float Scheduler::h_pc(FunctionInfo j, NodeInfo node){
+	
+	
+	
+}
+
+float Scheduler::before_assignment_cost(FunctionInfo j, NodeInfo node){
+	
+	
+	
+}
+
+float Scheduler::after_assignment_cost(FunctionInfo j, NodeInfo node){
+	
+	
+	
+}
+
+
 
 Scheduler::Scheduler(int functionCount, int memoryNeeded, int cpuNeeded){
     nextProcessId = 1;
