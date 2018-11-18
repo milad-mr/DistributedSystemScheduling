@@ -15,8 +15,8 @@
 
 using namespace std;
 
-#ifndef SCHEDULER_H
-#define SCHEDULER_H
+#ifndef INFORMATION_HANDLER_H
+#define INFORMATION_HANDLER_H
 class InformationHandler
 {
 public:

@@ -12,11 +12,12 @@ struct NodeInfo
 {
 	public:
 		string IpAddress;
-		int MemoryTotal;
-		int MemoryRemained;
+		int MemoryTotal; // not important for some form of scheduler
+		int MemoryRemained; // not important for some form of scheduler
 		int CpuTotal;
 		int CpuRemained;
-		 NodeInfo(string ipAddress) 
+		//int 
+		NodeInfo(string ipAddress) 
         {
 			IpAddress = ipAddress;
 			MemoryTotal = 100;

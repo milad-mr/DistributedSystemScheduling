@@ -32,7 +32,8 @@ string exec(const char* cmd) {
 NodeInfo InformationHandler::getNodeState(NodeInfo oldInfo){
 	
 	NodeInfo result;
-	string command = "mosctl rstatus" + oldInfo.IpAddress;
+	string command = "mosctl rstatus " + oldInfo.IpAddress;
+	cout << "command is " << command << endl;
 		string str = exec( command.c_str() );
  
 	vector<string> v{explode(str, ' ')};
