@@ -1,0 +1,5 @@
+all:
+	g++ -std=c++11 src/Sender.cpp src/Server.cpp src/Scheduler.cpp src/InformationHandler.cpp  -lzmq -lmsgpack -lpthread -o build/Server
+
+clean:
+	rm -rf build/Client

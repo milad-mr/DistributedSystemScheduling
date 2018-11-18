@@ -32,14 +32,14 @@ string exec(const char* cmd) {
 NodeInfo InformationHandler::getNodeState(NodeInfo oldInfo){
 	
 	NodeInfo result;
-	
-		string str = exec("mosctl rstatus" + oldInfo.IpAddress);
+	string command = "mosctl rstatus" + oldInfo.IpAddress;
+		string str = exec( command.c_str() );
  
 	vector<string> v{explode(str, ' ')};
 	result.IpAddress = oldInfo.IpAddress;
-	result.MemoryTotal = atoi(v[7]);
-	result.MemoryRemained = atoi(v[6]);
-	int load = atoi(v[1]);
+	result.MemoryTotal = atoi(v.at(7).c_str());
+	result.MemoryRemained = atoi(v.at(6).c_str());
+	int load = atoi(v[1].c_str());
 	
 	return result;
 	
