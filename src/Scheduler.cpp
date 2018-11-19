@@ -25,9 +25,8 @@ float Scheduler::p_pcy_pc(FunctionInfo j, NodeInfo node){
 	// The effective load imposed on pc due to the 
 	// assignment of job j to virtual core vc that
 	// is mapped to the physical core pc
-	float x =  ((float)j.cpuNeeded / node.CpuRemained) 
+	return  ((float)j.cpuNeeded / node.CpuRemained) 
 	+ virtualization_overhead() + sigma_pcy_pc(j) - fi_pcy_pc(j);
-	cout << "p_pcy_pc is : " << x<< endl;
 	
 }
 
@@ -80,8 +79,8 @@ float Scheduler::l_pc(NodeInfo node){
 
 float Scheduler::marginal_cost(FunctionInfo j, NodeInfo node){
 	
-	cout << " after assign cost is :" << after_assignment_cost(j, node) <<endl;;
-	cout << " before assign cost is :" << before_assignment_cost(j, node) <<endl;;
+	cout << "before assign cost is :" << before_assignment_cost(j, node) <<endl;
+	cout << "after assign cost is :" << after_assignment_cost(j, node) <<endl;;
 	return after_assignment_cost(j, node) - before_assignment_cost(j, node);
 	
 }
@@ -93,9 +92,7 @@ NodeInfo Scheduler::getBestNode(FunctionInfo j){
 	NodeInfo bestNode;
 	// The chosen node will not delete from list
 	for(auto const& node: nodes) {
-		cout << " in nodeees for " << endl;
 		float cost = marginal_cost(j, node);
-		cout << " marginal cost is :" << cost <<endl;;
 		if (cost < minCost){
 			    cout << " node ip is :" << node.IpAddress << "Load is : " << node.Load << endl;
 			minCost = cost;
@@ -118,6 +115,7 @@ bool Scheduler::is_stable(FunctionInfo j, NodeInfo node){
 
 bool Scheduler::reSchedule(NodeInfo& oldNode, NodeInfo& newNode, FunctionInfo& job) {
 	
+	cout << "checking for re scheduling ..." << endl;
 	for(int i = 0; i < assignedJobs.size(); ++i) {
 		if(!is_stable(assignedJobs[i].second, assignedJobs[i].first)){
 			newNode = getBestNode(assignedJobs[i].second);
@@ -134,6 +132,7 @@ bool Scheduler::reSchedule(NodeInfo& oldNode, NodeInfo& newNode, FunctionInfo& j
 bool Scheduler::schedule(NodeInfo& node, FunctionInfo& job){
 	
 	if(unAssignedJobs.size() == 0 ) return false;
+	cout << "scheduling ..." << endl;
 	job = unAssignedJobs.front();
 	node = getBestNode(unAssignedJobs.front());
 	unAssignedJobs.pop();
