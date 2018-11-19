@@ -1,6 +1,16 @@
 #include "InformationHandler.h"
 
 
+
+//~ void InformationHandler::InformationHandler(){
+	//~ DataAdaptor da(3, 0, 24, "compProcIPs.txt");	
+	//~ Computing c(da);
+	
+	
+	
+//~ }
+
+
 vector<string> explode(const string& s, const char& c)
 {
 	string buff{""};
@@ -35,14 +45,11 @@ NodeInfo InformationHandler::getNodeState(NodeInfo oldInfo){
 	string command = "mosctl rstatus " + oldInfo.IpAddress;
 	cout << "command is " << command << endl;
 		string str = exec( command.c_str() );
- 
 	vector<string> v{explode(str, ' ')};
 	result.IpAddress = oldInfo.IpAddress;
 	result.MemoryTotal = atoi(v.at(7).c_str());
 	result.MemoryRemained = atoi(v.at(6).c_str());
-	//cout << "hete 1" << endl;
 	result.Load = atoi(v[1].c_str());
-	//cout << "hete 2" << endl;
 	return result;
 	
 }

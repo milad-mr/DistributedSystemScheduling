@@ -27,7 +27,7 @@ float Scheduler::p_pcy_pc(FunctionInfo j, NodeInfo node){
 	// The effective load imposed on pc due to the 
 	// assignment of job j to virtual core vc that
 	// is mapped to the physical core pc
-	return (j.CpuNeeded / node.CpuRemained) 
+	return (j.cpuNeeded / node.CpuRemained) 
 	+ virtualization_overhead() + sigma_pcy_pc(j) - fi_pcy_pc(j);
 	
 }
@@ -93,16 +93,59 @@ NodeInfo Scheduler::getBestNode(FunctionInfo j){
 }
 
 ScheduleResult Scheduler::schedule(){
-	FunctionInfo fInfo;
-	fInfo.CpuNeeded = 1;
 	
-	ScheduleResult result(getBestNode(fInfo), nextFunctionIndex, nextFunctionIndex + 1);
+	//fInfo.CpuNeeded = 1;
+	
+	ScheduleResult result(getBestNode(unAssignedJobs.front()), nextFunctionIndex, nextFunctionIndex + 1);
+	unAssignedJobs.pop();
     nextFunctionIndex ++;
     return result;
 	
 }
 
-Scheduler::Scheduler(int functionCount, int memoryNeeded, int cpuNeeded){
+Scheduler::Scheduler(){
+	
+	
+}
+
+
+
+
+void Scheduler::addNode(NodeInfo newNode){
+    nodes.push_back(newNode);
+}
+
+void Scheduler::addJob(FunctionInfo newJob){
+    unAssignedJobs.push(newJob);
+}
+
+
+ void Scheduler::updateNodeState(NodeInfo newState){
+	 cout << "in update node state ips is " <<newState.IpAddress << endl; 
+	 for(auto & node: nodes) {
+		 if (node.IpAddress == newState.IpAddress){
+			cout << "old State Load is :" << node.Load << endl;
+			node = newState;
+			cout << "new State Load is :" << node.Load << endl;
+		 }
+	 }
+	//zzz cout << "new State Load is :" << node.Load << endl;
+ }
+ 
+ 
+ //deprecated codes for old algorithm
+ 
+ 
+ bool Scheduler::hasNext(){
+
+    cout << "has next : " << nextFunctionIndex << functionCount<<endl;
+    return nextFunctionIndex < functionCount - 1;
+
+
+}
+
+
+ Scheduler::Scheduler(int functionCount, int memoryNeeded, int cpuNeeded){
     nextProcessId = 1;
     nextFunctionIndex = 0;
     this -> memoryNeeded = memoryNeeded;
@@ -118,26 +161,7 @@ Scheduler::Scheduler(int functionCount, int memoryNeeded, int cpuNeeded, int pri
     this->priority = priority;
 
 }
-bool Scheduler::hasNext(){
 
-    cout << "has next : " << nextFunctionIndex << functionCount<<endl;
-    return nextFunctionIndex < functionCount - 1;
-
-
-}
-
- void Scheduler::updateNodeState(NodeInfo newState){
-	 cout << "in update node state ips is " <<newState.IpAddress << endl; 
-	 for(auto & node: nodes) {
-		 if (node.IpAddress == newState.IpAddress){
-			cout << "old State Load is :" << node.Load << endl;
-			node = newState;
-			cout << "new State Load is :" << node.Load << endl;
-		 }
-	 }
-	//zzz cout << "new State Load is :" << node.Load << endl;
- }
- 
 ScheduleResult Scheduler::getNext(){
     ScheduleResult result;
     int estimatedFunctionMemoryNeeded = memoryNeeded / functionCount;
@@ -168,7 +192,5 @@ ScheduleResult Scheduler::getNext(){
 }
 
 
-void Scheduler::addNode(NodeInfo newNode){
-    nodes.push_back(newNode);
-}
+
 

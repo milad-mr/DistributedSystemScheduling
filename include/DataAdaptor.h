@@ -31,6 +31,12 @@ class DataAdaptor {
 		int nodesCount;
 		std::string shdMemName;
 		std::vector <std::string> compProcIPs;
+		
+		static const int maxVmsCount = 255;
+		static const int maxJobsCount = 255;
+		static const int reservedSpace = maxVmsCount * maxJobsCount;
+		int vmId;
+		int jobId;
 };
 
 #endif

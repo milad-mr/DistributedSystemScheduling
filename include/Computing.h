@@ -11,12 +11,13 @@
 class Computing {
 	
 	public:
-		Computing(const DataAdaptor &da);
+		Computing(const DataAdaptor &da, int vmId, int jobId);
 		std::unique_ptr<int[]> access(int index, int count);
 		int access(int index);
 		void replytoReqs(const std::string &port);
 	
 	private:
 		DataAdaptor adaptor;
+		
 };
 #endif

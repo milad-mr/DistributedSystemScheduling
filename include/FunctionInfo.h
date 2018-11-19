@@ -14,9 +14,16 @@ using namespace std;
 struct FunctionInfo
 {
 	public:
-		int MemoryNeeded; // not used for some schedulers
-		int CpuNeeded = 1; //weight of CPU required
-};
+		int memoryNeeded; // not used for some schedulers
+		int cpuNeeded = 1; //weight of CPU required
+		int functionsCount;
+		int pid;
+		FunctionInfo(int pid, int functionsCount){
+			this -> pid = pid;
+			this -> functionsCount = functionsCount;
+			
+		}
+	};
 
 struct ScheduleResult
 {

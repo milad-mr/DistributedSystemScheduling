@@ -8,8 +8,10 @@
  
 /*Constructor for Computing process. This object is composed of DataAdaptor 
 object which does providing data.*/
-Computing::Computing(const DataAdaptor &da){
+Computing::Computing(const DataAdaptor &da, int vmId, int jobId){
 	adaptor = da;
+	//~ this -> vmId = vmId; //for example vm ip
+	//~ this -> jobId = jobId;
 }
 
 //access multiple elements
@@ -26,6 +28,7 @@ std::unique_ptr<int[]> Computing::access(int index, int count){
 
 //access one element
 int Computing::access(int index){
+	//~ int rawIndex  = index + reservedSpace;
 	std::cout << "This Process Wants to Access Element number" << index 
 				<< " of Input" << std::endl;
 	return adaptor.get(index);

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <queue>
 #include <cmath>
 using namespace std;
 
@@ -11,6 +12,8 @@ using namespace std;
 class Scheduler
 {
     vector<NodeInfo> nodes;
+    queue<FunctionInfo> unAssignedJobs;
+    vector<pair <NodeInfo, FunctionInfo>> assignedJobs;
    // vector<FunctionInfo> functions;
     //queue<pair <NodeInfo, FunctionInfo>> pa;
    // int getUniqueProcessId();
@@ -36,6 +39,7 @@ class Scheduler
 	float after_assignment_cost(FunctionInfo j, NodeInfo node);
 	
 public:
+	Scheduler();
     Scheduler(int functionCount, int memoryNeeded, int cpuNeeded);
     Scheduler(int functionCount, int memoryNeeded, int cpuNeeded, int priority);
     void reSchedule();
@@ -47,6 +51,7 @@ public:
     bool hasNext();
     void updateNodeState(NodeInfo newState);
     void addNode(string IpAddress);
+    void addJob(FunctionInfo newJob);
     void addNode(NodeInfo newNode);
 		//~ static void SendExecutable(std::string ip, std::string port, std::string path);
 		//~ static void SendCommand(std::string ip, std::string port, std::string cmd);
