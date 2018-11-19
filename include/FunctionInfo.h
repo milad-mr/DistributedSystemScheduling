@@ -23,6 +23,7 @@ struct FunctionInfo
 			this -> functionsCount = functionsCount;
 			
 		}
+		FunctionInfo(){};
 	};
 
 struct ScheduleResult

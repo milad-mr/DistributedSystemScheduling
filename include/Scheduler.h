@@ -14,9 +14,6 @@ class Scheduler
     vector<NodeInfo> nodes;
     queue<FunctionInfo> unAssignedJobs;
     vector<pair <NodeInfo, FunctionInfo>> assignedJobs;
-   // vector<FunctionInfo> functions;
-    //queue<pair <NodeInfo, FunctionInfo>> pa;
-   // int getUniqueProcessId();
     int getUniqueFunctionId();
     int nextProcessId ;
     int nextFunctionIndex ;
@@ -37,24 +34,23 @@ class Scheduler
 	float h_pc(FunctionInfo j, NodeInfo node);
 	float before_assignment_cost(FunctionInfo j, NodeInfo node);
 	float after_assignment_cost(FunctionInfo j, NodeInfo node);
-	
+	float marginal_cost(FunctionInfo j, NodeInfo node);
+	float alpha_pc(NodeInfo node);
+	float l_pc(NodeInfo node);
+	bool is_stable(FunctionInfo j, NodeInfo node);
+	NodeInfo getBestNode(FunctionInfo j); // new algorithm
 public:
 	Scheduler();
     Scheduler(int functionCount, int memoryNeeded, int cpuNeeded);
     Scheduler(int functionCount, int memoryNeeded, int cpuNeeded, int priority);
-    void reSchedule();
-    
+    bool reSchedule(NodeInfo& oldNode, NodeInfo& newNode, FunctionInfo& job);
+    bool schedule(NodeInfo& node, FunctionInfo& job); // new algorithm
     ScheduleResult getNext(); // old algorithm
-    NodeInfo getBestNode(FunctionInfo j); // new algorithm
-    ScheduleResult schedule(); // new algorithm
-   // ScheduleResult schedule();
     bool hasNext();
     void updateNodeState(NodeInfo newState);
     void addNode(string IpAddress);
     void addJob(FunctionInfo newJob);
     void addNode(NodeInfo newNode);
-		//~ static void SendExecutable(std::string ip, std::string port, std::string path);
-		//~ static void SendCommand(std::string ip, std::string port, std::string cmd);
 };
 
 #endif

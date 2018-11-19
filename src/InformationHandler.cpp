@@ -1,16 +1,5 @@
 #include "InformationHandler.h"
 
-
-
-//~ void InformationHandler::InformationHandler(){
-	//~ DataAdaptor da(3, 0, 24, "compProcIPs.txt");	
-	//~ Computing c(da);
-	
-	
-	
-//~ }
-
-
 vector<string> explode(const string& s, const char& c)
 {
 	string buff{""};

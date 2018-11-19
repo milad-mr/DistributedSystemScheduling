@@ -27,13 +27,14 @@ float Scheduler::p_pcy_pc(FunctionInfo j, NodeInfo node){
 	// The effective load imposed on pc due to the 
 	// assignment of job j to virtual core vc that
 	// is mapped to the physical core pc
-	return (j.cpuNeeded / node.CpuRemained) 
+	float x =  ((float)j.cpuNeeded / node.CpuRemained) 
 	+ virtualization_overhead() + sigma_pcy_pc(j) - fi_pcy_pc(j);
+	cout << "p_pcy_pc is : " << x<< endl;
 	
 }
 
 float Scheduler::sigma_pcy_pc(FunctionInfo j){
-	
+	return 1; //like mosix processes
 	
 	
 }
@@ -47,12 +48,12 @@ float Scheduler::a(){
 float Scheduler::g_pc(FunctionInfo j, NodeInfo node){
 	
 	
-	
+	return 0;
 }
 
 float Scheduler::h_pc(FunctionInfo j, NodeInfo node){
 	
-	return node.Load;
+	return (float)node.Load / 100;
 	
 }
 
@@ -64,8 +65,28 @@ float Scheduler::before_assignment_cost(FunctionInfo j, NodeInfo node){
 
 float Scheduler::after_assignment_cost(FunctionInfo j, NodeInfo node){
 	
-	return pow(a(), g_pc(j, node) + fi_pcy_pc(j)) + pow(a(), h_pc(j, node) +p_pcy_pc(j, node)); 
+	return pow(a(), g_pc(j, node) + fi_pcy_pc(j)) + pow(a(), h_pc(j, node) + p_pcy_pc(j, node)); 
+	 
 	
+}
+
+float Scheduler::alpha_pc(NodeInfo node){
+	
+	return 0;
+	
+}
+
+float Scheduler::l_pc(NodeInfo node){
+	
+	return (float)node.Load / 100;
+	
+}
+
+float Scheduler::marginal_cost(FunctionInfo j, NodeInfo node){
+	
+	cout << " after assign cost is :" << after_assignment_cost(j, node) <<endl;;
+	cout << " before assign cost is :" << before_assignment_cost(j, node) <<endl;;
+	return after_assignment_cost(j, node) - before_assignment_cost(j, node);
 	
 }
 
@@ -76,10 +97,10 @@ NodeInfo Scheduler::getBestNode(FunctionInfo j){
 	// The chosen node will not delete from list
 	for(auto const& node: nodes) {
 		cout << " in nodeees for " << endl;
-		float cost = after_assignment_cost(j, node) - before_assignment_cost(j, node);
+		float cost = marginal_cost(j, node);
+		cout << " marginal cost is :" << cost <<endl;;
 		if (cost < minCost){
 			    cout << " node ip is :" << node.IpAddress << "Load is : " << node.Load << endl;
-
 			minCost = cost;
 			bestNode = node;
 		}
@@ -92,15 +113,36 @@ NodeInfo Scheduler::getBestNode(FunctionInfo j){
 	//return best node
 }
 
-ScheduleResult Scheduler::schedule(){
+bool Scheduler::is_stable(FunctionInfo j, NodeInfo node){
+	return marginal_cost(j, node) <= 2 * (pow(a(), alpha_pc(node) + fi_pcy_pc(j)) + pow(a(), l_pc(node) +p_pcy_pc(j, node))
+										- (pow(a(), alpha_pc(node) ) + pow(a(), l_pc(node)))); 
 	
-	//fInfo.CpuNeeded = 1;
 	
-	ScheduleResult result(getBestNode(unAssignedJobs.front()), nextFunctionIndex, nextFunctionIndex + 1);
+	
+}
+
+bool Scheduler::reSchedule(NodeInfo& oldNode, NodeInfo& newNode, FunctionInfo& job) {
+	
+	for(int i = 0; i < assignedJobs.size(); ++i) {
+		if(!is_stable(assignedJobs[i].second, assignedJobs[i].first)){
+			newNode = getBestNode(assignedJobs[i].second);
+			oldNode = assignedJobs[i].first;
+			assignedJobs.erase(assignedJobs.begin()  + i);
+			return true;
+		}
+	}
+	return false;
+}
+
+
+bool Scheduler::schedule(NodeInfo& node, FunctionInfo& job){
+	
+	if(unAssignedJobs.size() == 0 ) return false;
+	job = unAssignedJobs.front();
+	node = getBestNode(unAssignedJobs.front());
 	unAssignedJobs.pop();
-    nextFunctionIndex ++;
-    return result;
-	
+	assignedJobs.push_back(make_pair(node, job));
+    return true;
 }
 
 Scheduler::Scheduler(){
@@ -126,9 +168,10 @@ void Scheduler::addJob(FunctionInfo newJob){
 		 if (node.IpAddress == newState.IpAddress){
 			cout << "old State Load is :" << node.Load << endl;
 			node = newState;
-			cout << "new State Load is :" << node.Load << endl;
+			
 		 }
 	 }
+	 cout << "new State Load is :" << nodes[1].Load << endl;
 	//zzz cout << "new State Load is :" << node.Load << endl;
  }
  
@@ -146,6 +189,7 @@ void Scheduler::addJob(FunctionInfo newJob){
 
 
  Scheduler::Scheduler(int functionCount, int memoryNeeded, int cpuNeeded){
+	 cout << "in update node state ips is ";// <<newState.IpAddress << endl; 
     nextProcessId = 1;
     nextFunctionIndex = 0;
     this -> memoryNeeded = memoryNeeded;
