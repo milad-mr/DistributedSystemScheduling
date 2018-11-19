@@ -1,15 +1,14 @@
 #include "Scheduler.h"
 
 float Scheduler::virtualization_overhead(){
-	return 0;
 	
+	return 0;
 	
 }
 
 float Scheduler::fi_vm_j(FunctionInfo j){
 	
 	return 1;
-	
 	
 }
 
@@ -19,7 +18,6 @@ float Scheduler::fi_pcy_pc(FunctionInfo j){
 	// that is mapped to physical core pc
 	
 	return fi_vm_j(j);
-	
 	
 }
 
@@ -34,8 +32,8 @@ float Scheduler::p_pcy_pc(FunctionInfo j, NodeInfo node){
 }
 
 float Scheduler::sigma_pcy_pc(FunctionInfo j){
-	return 1; //like mosix processes
 	
+	return 1; //like mosix processes
 	
 }
 
@@ -46,7 +44,6 @@ float Scheduler::a(){
 }
 
 float Scheduler::g_pc(FunctionInfo j, NodeInfo node){
-	
 	
 	return 0;
 }
@@ -67,7 +64,6 @@ float Scheduler::after_assignment_cost(FunctionInfo j, NodeInfo node){
 	
 	return pow(a(), g_pc(j, node) + fi_pcy_pc(j)) + pow(a(), h_pc(j, node) + p_pcy_pc(j, node)); 
 	 
-	
 }
 
 float Scheduler::alpha_pc(NodeInfo node){
@@ -92,6 +88,7 @@ float Scheduler::marginal_cost(FunctionInfo j, NodeInfo node){
 
 
 NodeInfo Scheduler::getBestNode(FunctionInfo j){
+	
 	float minCost = 99999;
 	NodeInfo bestNode;
 	// The chosen node will not delete from list
@@ -109,15 +106,13 @@ NodeInfo Scheduler::getBestNode(FunctionInfo j){
                  
     cout << "best node ip is :" << bestNode.IpAddress << "Load is : " << bestNode.Load << endl;
 	return bestNode;
-	
-	//return best node
+
 }
 
 bool Scheduler::is_stable(FunctionInfo j, NodeInfo node){
+	
 	return marginal_cost(j, node) <= 2 * (pow(a(), alpha_pc(node) + fi_pcy_pc(j)) + pow(a(), l_pc(node) +p_pcy_pc(j, node))
 										- (pow(a(), alpha_pc(node) ) + pow(a(), l_pc(node)))); 
-	
-	
 	
 }
 
@@ -132,6 +127,7 @@ bool Scheduler::reSchedule(NodeInfo& oldNode, NodeInfo& newNode, FunctionInfo& j
 		}
 	}
 	return false;
+	
 }
 
 
@@ -143,6 +139,7 @@ bool Scheduler::schedule(NodeInfo& node, FunctionInfo& job){
 	unAssignedJobs.pop();
 	assignedJobs.push_back(make_pair(node, job));
     return true;
+    
 }
 
 Scheduler::Scheduler(){
@@ -154,15 +151,20 @@ Scheduler::Scheduler(){
 
 
 void Scheduler::addNode(NodeInfo newNode){
+	
     nodes.push_back(newNode);
+    
 }
 
 void Scheduler::addJob(FunctionInfo newJob){
+	
     unAssignedJobs.push(newJob);
+    
 }
 
 
  void Scheduler::updateNodeState(NodeInfo newState){
+	 
 	 cout << "in update node state ips is " <<newState.IpAddress << endl; 
 	 for(auto & node: nodes) {
 		 if (node.IpAddress == newState.IpAddress){
@@ -172,7 +174,7 @@ void Scheduler::addJob(FunctionInfo newJob){
 		 }
 	 }
 	 cout << "new State Load is :" << nodes[1].Load << endl;
-	//zzz cout << "new State Load is :" << node.Load << endl;
+	 
  }
  
  
@@ -184,11 +186,11 @@ void Scheduler::addJob(FunctionInfo newJob){
     cout << "has next : " << nextFunctionIndex << functionCount<<endl;
     return nextFunctionIndex < functionCount - 1;
 
-
 }
 
 
  Scheduler::Scheduler(int functionCount, int memoryNeeded, int cpuNeeded){
+	 
 	 cout << "in update node state ips is ";// <<newState.IpAddress << endl; 
     nextProcessId = 1;
     nextFunctionIndex = 0;
@@ -199,6 +201,7 @@ void Scheduler::addJob(FunctionInfo newJob){
 }
 
 Scheduler::Scheduler(int functionCount, int memoryNeeded, int cpuNeeded, int priority){
+	
     nextProcessId = 1;
     nextFunctionIndex = 0;
     this->functionCount = functionCount;
@@ -207,6 +210,7 @@ Scheduler::Scheduler(int functionCount, int memoryNeeded, int cpuNeeded, int pri
 }
 
 ScheduleResult Scheduler::getNext(){
+	
     ScheduleResult result;
     int estimatedFunctionMemoryNeeded = memoryNeeded / functionCount;
     int estimatedFunctionCpuNeeded = cpuNeeded / functionCount; // in percent
@@ -233,6 +237,7 @@ ScheduleResult Scheduler::getNext(){
              }
         }
     }
+    
 }
 
 

@@ -63,22 +63,6 @@ void testNewAlgorithm(){
 			
 		}
 		sleep(1);
-		//scheduler.updateNodeState(infoHandler.getNodeState(sampleNode2));
-		//cout << "new info load is : " << newInfo.Load << endl;
-		//~ sleep(1);
-		//~ ScheduleResult scheduled = scheduler.schedule();
-		//~ Command command;
-		//~ command.Type = "run";
-		//~ command.PID = pid;
-		//~ command.StartIndex = scheduled.startIndex;
-		//~ command.EndIndex = scheduled.endIndex;
-		//~ cout << "ip is : " << scheduled.node.IpAddress << "indexes from :" << scheduled.startIndex << " to : "
-		 //~ << scheduled.endIndex << endl;
-		//~ cout << "before send";
-		//~ sender.Send(scheduled.node.IpAddress, command);
-		//~ cout << "after send";
-		//~ sleep(2);
-
 	
 	}
 }

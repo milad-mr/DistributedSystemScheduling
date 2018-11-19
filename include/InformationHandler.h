@@ -27,10 +27,6 @@ class InformationHandler
 	DataAdaptor dataAdaptor;
 public:
 	NodeInfo getNodeState(NodeInfo);
-	//InformationHandler();
-	
-	
-	
 };
 
 #endif
